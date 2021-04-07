@@ -14,11 +14,12 @@ public class SOAPIntegrationClient extends WebServiceGatewaySupport {
     @Value("${ws.countries.url}")
     private String countriesURI;
 
-    public void getCapitalCityForCountry(String countryISOCode) {
+    public String getCapitalCityForCountry(String countryISOCode) {
         CapitalCity capitalCity = new CapitalCity();
         capitalCity.setSCountryISOCode(countryISOCode);
         CapitalCityResponse city = (CapitalCityResponse) getWebServiceTemplate().marshalSendAndReceive(countriesURI, capitalCity);
         LOGGER.info("Capital city for "+countryISOCode+ ": "+city.getCapitalCityResult());
+        return city.getCapitalCityResult();
     }
 
 }
