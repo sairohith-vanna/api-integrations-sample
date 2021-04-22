@@ -2,6 +2,7 @@ package com.vanna.apiintegrations;
 
 import com.vanna.apiintegrations.rest.RESTIntegrationClient;
 import com.vanna.apiintegrations.rest.User;
+import com.vanna.apiintegrations.rest.UserCreationResponse;
 import com.vanna.apiintegrations.soap.SOAPIntegrationClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -49,6 +50,21 @@ public class APIIntegrationController {
             response = new APIResponse(userList, "REST_API_CALL_SUCCESS", "The REST API call is successful");
             return ResponseEntity.ok(response);
         } catch (Exception ex) {
+            response = new APIResponse(null, "REST_API_CALL_FAILURE",
+                    "The REST API call ran into an error");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    @GetMapping("rest/users/create")
+    public ResponseEntity<?> createSampleUser() {
+        APIResponse response;
+        try {
+            UserCreationResponse userCreationResponse = restClient.postUsers();
+            response = new APIResponse(userCreationResponse, "REST_API_CALL_SUCCESS", "The REST API call is successful");
+            return ResponseEntity.ok(response);
+        } catch (Exception ex) {
+            ex.printStackTrace();
             response = new APIResponse(null, "REST_API_CALL_FAILURE",
                     "The REST API call ran into an error");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
